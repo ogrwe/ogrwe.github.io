@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Dani!</title>
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        
+        body {
+            max-width: 375px;
+            margin: 0 auto;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Background sparkles */
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .sparkle {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite;
+        }
+        
+        /* Section styles - all initially hidden except landing */
+        #landing, #greeting, #game, #end {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        #greeting, #game, #end {
+            display: none;
+        }
+        
+        /* Landing page styles */
+        #landing {
+            background-color: #fff8fa;
+            color: #d3339f;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 150, 180, 0.1) 10px, rgba(255, 150, 180, 0.1) 20px);
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            border: 12px solid #ff3366;
+            border-image: linear-gradient(45deg, #ff3366, #ff9e7d, #ffbe33, #a8ff78, #78ffd6, #78a9ff, #c178ff) 1;
+            margin: 15px;
+            height: calc(100vh - 30px);
+            border-radius: 5px;
+        }
+        
+        /* Add a fold effect to make it look like a card */
+        #landing:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-width: 0 25px 25px 0;
+            border-style: solid;
+            border-color: #ff3366 #f8f8f8;
+            box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 0 5px;
+        }
+        
+        #landing h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            animation: glow 1.5s ease-in-out infinite alternate;
+            text-shadow: 0 0 5px rgba(255,150,180,0.5);
+            background: linear-gradient(90deg, #ff3366, #ff9e7d, #ffbe33, #a8ff78, #78ffd6, #78a9ff, #c178ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: textGradient 5s linear infinite, float-text 3s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+        
+        @keyframes textGradient {
+            to { background-position: 200% center; }
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #ff4da6, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+            }
+        }
+        
+        #start-btn {
+            background-color: transparent;
+            color: #d3d3d3;
+            border: 1px solid #d3d3d3;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        #start-btn:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.1);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease-out;
+            z-index: -1;
+        }
+        
+        #start-btn:hover:after, #start-btn:active:after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        #start-btn:hover, #start-btn:active {
+            color: white;
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Greeting styles */
+        #greeting {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #greeting:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, #fad0c4 20%, #fad0c4 80%, transparent 80%, transparent), 
+                        radial-gradient(circle, transparent 20%, #ff9a9e 20%, #ff9a9e 80%, transparent 80%, transparent) 50px 50px;
+            background-size: 100px 100px;
+            opacity: 0.1;
+        }
+        
+        #greeting h1 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            position: relative;
+            animation: bounce 1s ease infinite alternate;
+            background: linear-gradient(to right, #ff0844 0%, #ffb199 35%, #ff1493 50%, #ffc371 65%, #ff5e62 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% auto;
+            animation: textGradient 3s linear infinite, bounce 1s ease infinite alternate;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-10px); }
+        }
+        
+        #greeting p {
+            font-style: italic;
+            color: #333;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #next-btn {
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+            max-width: 280px;
+            line-height: 1.3;
+            font-weight: bold;
+        }
+        
+        #next-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        #next-btn:hover:before, #next-btn:active:before {
+            left: 100%;
+        }
+        
+        #next-btn:hover, #next-btn:active {
+            transform: scale(1.05);
+            box-shadow: 0 7px 20px rgba(255, 51, 102, 0.6);
+        }
+        
+        /* Game styles */
+        #game {
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .cloud {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            filter: blur(10px);
+            z-index: 1;
+            opacity: 0.6;
+            animation: driftCloud 60s linear infinite;
+        }
+        
+        @keyframes driftCloud {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(400px); }
+        }
+        
+        #score {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+            transition: transform 0.2s ease;
+        }
+        
+        #score.pulse {
+            animation: scorePulse 0.3s ease-out;
+        }
+        
+        @keyframes scorePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .balloon {
+            width: 90px;
+            height: 105px;
+            position: absolute;
+            cursor: pointer;
+            animation: floatSlower 15s ease-in-out infinite;
+            bottom: -100px;
+            transition: transform 0.2s ease;
+            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
+            border-radius: 10px;
+            object-fit: cover;
+            transform-origin: center bottom;
+        }
+        
+        .balloon:hover {
+            transform: scale(1.1);
+        }
+        
+        @keyframes floatSlower {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            20% {
+                transform: translateY(-15vh) translateX(10px) rotate(2deg);
+            }
+            40% {
+                transform: translateY(-30vh) translateX(-7px) rotate(-2deg);
+            }
+            60% {
+                transform: translateY(-45vh) translateX(5px) rotate(1deg);
+            }
+            80% {
+                transform: translateY(-60vh) translateX(-3px) rotate(-1deg);
+            }
+            100% {
+                transform: translateY(-75vh) translateX(0) rotate(0deg);
+            }
+        }
+        
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            animation: pulse 2s infinite, fadeOut 3s forwards;
+            animation-delay: 0s, 5s;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 20px;
+            width: 80%;
+            left: 10%;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        
+        .pop-effect {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: popGrow 0.5s forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes popGrow {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+        
+        /* End screen styles */
+        #end {
+            background-color: #1a1a1a;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #end:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            z-index: -1;
+        }
+        
+        #end h2 {
+            font-size: 3.5rem;
+            color: gold;
+            margin-bottom: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-shadow: 0 0 10px gold, 0 0 20px rgba(255, 215, 0, 0.5);
+            letter-spacing: 2px;
+            animation: winPulse 2s infinite;
+        }
+        
+        @keyframes winPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); text-shadow: 0 0 20px gold, 0 0 30px rgba(255, 215, 0, 0.7); }
+        }
+        
+        #final-msg {
+            color: white;
+            font-size: 1.5rem;
+            animation: blink 1.5s infinite, float-text 3s ease-in-out infinite;
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 0 0 5px white;
+            padding: 10px;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes float-text {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Confetti styles */
+        .confetti {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Star shape for confetti */
+        .star, .circle, .rect {
+            position: absolute;
+            display: block;
+            opacity: 0.7;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Star field animation for end screen */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star-field {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* Transition animations */
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+        
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+        
+        /* Loading spinner for transition effects */
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff3366;
+            animation: spin 1s linear infinite;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background sparkles container -->
+    <div class="sparkles" id="sparkles"></div>
+    
+    <!-- Loading spinner for transitions -->
+    <div class="loading-spinner" id="loading-spinner"></div>
+    
+    <!-- Landing Page -->
+    <div id="landing">
+        <h1>Dear Dani</h1>
+        <button id="start-btn">Click Here</button>
+    </div>
+    
+    <!-- Birthday Greeting -->
+    <div id="greeting">
+        <h1>HAPPY BIRTHDAY</h1>
+        <p>I hope you have an amazing day. It is very rare for friends like you to come by, and rarer-still for them to stay. I'm so glad you're sticking around in Chicago; this is just the start! <br> See you soon - from Otto</p>
+        <button id="next-btn">Thank you so much Otto, you are the absolute best! (click to agree)</button>
+    </div>
+    
+    <!-- Balloon Game -->
+    <div id="game">
+        <div id="score">Score: 0</div>
+        <p id="instructions">Pop the balloons for points!</p>
+        <!-- Clouds will be added dynamically -->
+        <!-- Balloons will be added dynamically -->
+    </div>
+    
+    <!-- End Screen -->
+    <div id="end">
+        <div class="stars" id="stars"></div>
+        <h2>YOU WIN!</h2>
+        <p id="final-msg">Thanks for playing!<br>The magic continues on Friday...</p>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const landing = document.getElementById('landing');
+        const greeting = document.getElementById('greeting');
+        const game = document.getElementById('game');
+        const end = document.getElementById('end');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreDisplay = document.getElementById('score');
+        const sparklesContainer = document.getElementById('sparkles');
+        const starsContainer = document.getElementById('stars');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        
+        // Game variables
+        let score = 0;
+        let balloonsPopped = 0;
+        const totalBalloons = 10;
+        
+        // Create initial background effects
+        createSparkles();
+        
+        // Event listeners
+        startBtn.addEventListener('click', startGreeting);
+        nextBtn.addEventListener('click', startGame);
+        
+        // Create sparkles for background
+        function createSparkles() {
+            for (let i = 0; i < 50; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+                const delay = Math.random() * 5;
+                
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                sparkle.style.left = `${posX}px`;
+                sparkle.style.top = `${posY}px`;
+                sparkle.style.animationDelay = `${delay}s`;
+                
+                sparklesContainer.appendChild(sparkle);
+            }
+        }
+        
+        // Create star field for end screen
+        function createStarField() {
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star-field');
+                
+                const size = Math.random() * 2 + 1;
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+                const delay = Math.random() * 4;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}px`;
+                star.style.top = `${posY}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Navigation functions with transitions
+        function startGreeting() {
+            showLoadingSpinner();
+            
+            setTimeout(() => {
+                landing.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    landing.style.display = 'none';
+                    greeting.classList.add('fade-in');
+                    greeting.style.display = 'flex';
+                    hideLoadingSpinner();
+                    
+                    // Celebration confetti
+                    createFancyConfetti(window.innerWidth / 2, window.innerHeight / 2, 150);
+                    
+                    // Type the message
+                    const messageElement = greeting.querySelector('p');
+                    const message = messageElement.textContent;
+                    messageElement.textContent = '';
+                    
+                    setTimeout(() => {
+                        typeText(messageElement, message, 50);
+                    }, 1000);
+                    
+                }, 500);
+            }, 600);
+        }
+        
+        function startGame() {
+            showLoadingSpinner();
+            
+            setTimeout(() => {
+                greeting.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    greeting.style.display = 'none';
+                    game.classList.add('fade-in');
+                    game.style.display = 'block';
+                    hideLoadingSpinner();
+                    
+                    // Celebration confetti
+                    createFancyConfetti(window.innerWidth / 2, window.innerHeight / 2, 120);
+                    
+                    // Create clouds
+                    createClouds();
+                    
+                    // Initialize game
+                    initGame();
+                }, 500);
+            }, 600);
+        }
+        
+        function endGame() {
+            showLoadingSpinner();
+            
+            setTimeout(() => {
+                game.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    game.style.display = 'none';
+                    end.classList.add('fade-in');
+                    end.style.display = 'flex';
+                    hideLoadingSpinner();
+                    
+                    // Create starfield
+                    createStarField();
+                    
+                    // Grand finale confetti
+                    createFancyConfetti(window.innerWidth / 2, window.innerHeight / 2, 200);
+                }, 500);
+            }, 600);
+        }
+        
+        // Show/hide loading spinner
+        function showLoadingSpinner() {
+            loadingSpinner.style.display = 'block';
+        }
+        
+        function hideLoadingSpinner() {
+            loadingSpinner.style.display = 'none';
+        }
+        
+        // Typewriter effect
+        function typeText(element, text, speed) {
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, speed);
+        }
+        
+        // Create cloud backgrounds
+        function createClouds() {
+            for (let i = 0; i < 6; i++) {
+                const cloud = document.createElement('div');
+                cloud.classList.add('cloud');
+                
+                const size = Math.random() * 100 + 50;
+                const posY = Math.random() * window.innerHeight;
+                const delay = Math.random() * 10;
+                
+                cloud.style.width = `${size}px`;
+                cloud.style.height = `${size / 2}px`;
+                cloud.style.top = `${posY}px`;
+                cloud.style.animationDelay = `${delay}s`;
+                
+                game.appendChild(cloud);
+            }
+        }
+        
+        // Game initialization
+        function initGame() {
+            // Reset game state
+            score = 0;
+            balloonsPopped = 0;
+            scoreDisplay.textContent = 'Score: 0';
+            
+            // Balloon image URLs
+            const balloonImages = [
+                'https://i.postimg.cc/xJgxP1dc/IMG-0200.jpg',
+                'https://i.postimg.cc/jWHkLX06/IMG-0208.jpg',
+                'https://i.postimg.cc/6yPPSqfZ/IMG-0209.jpg',
+                'https://i.postimg.cc/phPc8FRw/IMG-0528.jpg',
+                'https://i.postimg.cc/rdXPVHbF/IMG-0541.jpg',
+                'https://i.postimg.cc/dDqgZz0h/IMG-0791.jpg',
+                'https://i.postimg.cc/ZWyQhmwM/IMG-0793.jpg',
+                'https://i.postimg.cc/6yqSYnnw/IMG-0800.jpg',
+                'https://i.postimg.cc/PN29W2L2/IMG-0827.jpg',
+                'https://i.postimg.cc/gLk5967V/IMG-0895.jpg'
+            ];
+            
+            // Calculate spacing for balloons
+            const gameWidth = window.innerWidth;
+            const columnCount = 3; // Display 3 balloons per row
+            const columnWidth = gameWidth / columnCount;
+            
+            // Create balloons with proper spacing
+            for (let i = 0; i < totalBalloons; i++) {
+                const column = i % columnCount; // Determine column (0, 1, or 2)
+                const row = Math.floor(i / columnCount); // Determine row
+                
+                // Add delay based on row to space them out vertically
+                const delay = row * 4 + Math.random() * 2;
+                
+                // Calculate x position with some randomness within the column
+                const xPosition = column * columnWidth + Math.random() * (columnWidth - 80);
+                
+                createBalloon(i, balloonImages[i], xPosition, delay);
+            }
+        }
+        
+        function createBalloon(id, imageUrl, xPosition, delay) {
+            const balloon = document.createElement('img');
+            balloon.classList.add('balloon');
+            balloon.id = 'balloon' + id;
+            
+            // Use the provided image URLs
+            balloon.src = imageUrl;
+            balloon.alt = 'Balloon ' + id;
+            
+            // Position with proper spacing
+            balloon.style.left = xPosition + 'px';
+            
+            // Slower animation with delay
+            balloon.style.animationDelay = delay + 's';
+            const duration = 15 + Math.random() * 5; // Between 15-20s
+            balloon.style.animationDuration = duration + 's';
+            
+            // Make balloon poppable with hover effect
+            balloon.addEventListener('mouseenter', function() {
+                balloon.style.transform = 'scale(1.15)';
+            });
+            
+            balloon.addEventListener('mouseleave', function() {
+                balloon.style.transform = 'scale(1)';
+            });
+            
+            balloon.addEventListener('click', function() {
+                popBalloon(balloon, parseFloat(balloon.style.left), 0);
+            });
+            
+            balloon.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                popBalloon(balloon, parseFloat(balloon.style.left), 0);
+            });
+            
+            game.appendChild(balloon);
+            
+            // Instead of letting balloons float offscreen and respawning,
+            // let's just make them float up to 75vh max and stay in view
+            // No respawn needed since they stay on screen
+        }
+        
+        function popBalloon(balloon, xPos, hueRotate) {
+            // Get balloon position
+            const rect = balloon.getBoundingClientRect();
+            const yPos = rect.top + rect.height / 2;
+            const centerX = rect.left + rect.width / 2;
+            
+            // Create pop effect
+            const popEffect = document.createElement('div');
+            popEffect.classList.add('pop-effect');
+            popEffect.style.left = (centerX - 50) + 'px';
+            popEffect.style.top = (yPos - 50) + 'px';
+            document.body.appendChild(popEffect);
+            
+            // Play pop sound (optional)
+            const popSound = new Audio('data:audio/mp3;base64,SUQzAwAAAAAAJlRQRTEAAAAcAAAAU291bmRKYXkuY29tIFNvdW5kIEVmZmVjdHMA//uSwAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAVAAAR9AAICAgQEBAYGBggICApKSksLCw0NDQ9PT1FRUVNTk5WVlZeXl5nZ2dwcHB4eHiAgICIiIiRkZGZmZmhoaGpqamysrK6urrrCwsTE0xUVFxcXGRkZGxsbHR0dHx8fISEhIyMjJSUlJycnKSkpKysrLS0tLy8vMHBwcnJytra2uLi4urq6vLy8vr6+gAAAABMQEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7ksDAL8AAAGkAAANIAAAaQAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+            popSound.volume = 0.2;
+            popSound.play();
+            
+            // Increase score with animation
+            score++;
+            balloonsPopped++;
+            scoreDisplay.textContent = 'Score: ' + score;
+            scoreDisplay.classList.add('pulse');
+            setTimeout(() => {
+                scoreDisplay.classList.remove('pulse');
+            }, 300);
+            
+            // Remove balloon
+            game.removeChild(balloon);
+            
+            // Create confetti at balloon position with matching color
+            createColoredConfetti(centerX, yPos, 30, hueRotate);
+            
+            // Check if game over
+            if (balloonsPopped >= totalBalloons) {
+                setTimeout(endGame, 1500);
+            }
+            
+            // Remove pop effect after animation
+            setTimeout(() => {
+                if (popEffect.parentNode) {
+                    popEffect.parentNode.removeChild(popEffect);
+                }
+            }, 500);
+        }
+        
+        // Enhanced confetti functions
+        function createFancyConfetti(x, y, amount) {
+            const colors = ['#ff3366', '#3366ff', '#66ff33', '#ffff33', '#ff33ff', '#ff9900', '#00ffcc'];
+            
+            for (let i = 0; i < amount; i++) {
+                // Determine confetti type (rectangle, circle, or star)
+                const confettiType = Math.floor(Math.random() * 3);
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Create different shapes
+                let shape;
+                if (confettiType === 0) { // rectangle
+                    shape = document.createElement('div');
+                    shape.classList.add('rect');
+                    const width = Math.random() * 10 + 5;
+                    const height = Math.random() * 10 + 5;
+                    shape.style.width = width + 'px';
+                    shape.style.height = height + 'px';
+                } else if (confettiType === 1) { // circle
+                    shape = document.createElement('div');
+                    shape.classList.add('circle');
+                    const size = Math.random() * 8 + 4;
+                    shape.style.width = size + 'px';
+                    shape.style.height = size + 'px';
+                    shape.style.borderRadius = '50%';
+                } else { // star
+                    shape = document.createElement('div');
+                    shape.classList.add('star');
+                    shape.innerHTML = '★';
+                    const size = Math.random() * 15 + 10;
+                    shape.style.fontSize = size + 'px';
+                    shape.style.lineHeight = '1';
+                }
+                
+                // Random styling
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                shape.style.backgroundColor = confettiType !== 2 ? color : 'transparent';
+                shape.style.color = confettiType === 2 ? color : 'transparent';
+                
+                // Add to confetti container
+                confetti.appendChild(shape);
+                
+                // Position at the source with slight random offset
+                const randomOffsetX = Math.random() * 20 - 10;
+                const randomOffsetY = Math.random() * 20 - 10;
+                confetti.style.left = (x + randomOffsetX) + 'px';
+                confetti.style.top = (y + randomOffsetY) + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                // Animate confetti with physics
+                animateFancyConfetti(confetti);
+            }
+        }
+        
+        function createColoredConfetti(x, y, amount, hueValue) {
+            // Calculate color based on hue value
+            const baseColor = `hsl(${hueValue}, 100%, 50%)`;
+            
+            for (let i = 0; i < amount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Create different shapes with consistent color theme
+                const confettiType = Math.floor(Math.random() * 3);
+                let shape;
+                
+                if (confettiType === 0) { // rectangle
+                    shape = document.createElement('div');
+                    shape.classList.add('rect');
+                    const width = Math.random() * 8 + 3;
+                    const height = width * (Math.random() * 0.5 + 0.5);
+                    shape.style.width = width + 'px';
+                    shape.style.height = height + 'px';
+                } else if (confettiType === 1) { // circle
+                    shape = document.createElement('div');
+                    shape.classList.add('circle');
+                    const size = Math.random() * 6 + 3;
+                    shape.style.width = size + 'px';
+                    shape.style.height = size + 'px';
+                    shape.style.borderRadius = '50%';
+                } else { // star
+                    shape = document.createElement('div');
+                    shape.classList.add('star');
+                    shape.innerHTML = '★';
+                    const size = Math.random() * 12 + 8;
+                    shape.style.fontSize = size + 'px';
+                    shape.style.lineHeight = '1';
+                }
+                
+                // Color variations based on the balloon's hue
+                const lightnessVariation = Math.random() * 30 + 40; // 40-70% lightness
+                const color = `hsl(${hueValue}, 100%, ${lightnessVariation}%)`;
+                shape.style.backgroundColor = confettiType !== 2 ? color : 'transparent';
+                shape.style.color = confettiType === 2 ? color : 'transparent';
+                
+                // Add to confetti container
+                confetti.appendChild(shape);
+                
+                // Position with slight random offset from balloon
+                const randomOffsetX = Math.random() * 30 - 15;
+                const randomOffsetY = Math.random() * 30 - 15;
+                confetti.style.left = (x + randomOffsetX) + 'px';
+                confetti.style.top = (y + randomOffsetY) + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                // Animate with shorter duration for balloon pops
+                animateFancyConfetti(confetti, true);
+            }
+        }
+        
+        function animateFancyConfetti(confetti, isBaloonPop = false) {
+            // Physics-based movement
+            const angle = Math.random() * Math.PI * 2; // Random direction in radians
+            const velocity = isBaloonPop ? Math.random() * 100 + 50 : Math.random() * 150 + 100;
+            const velocityX = Math.cos(angle) * velocity * (Math.random() * 0.5 + 0.5);
+            const velocityY = Math.sin(angle) * velocity * (Math.random() * 0.5 + 0.5);
+            
+            // Gravity and drag
+            const gravity = isBaloonPop ? 980 : 500; // Pixels per second squared
+            const drag = 0.075;
+            
+            // Initial position and rotation
+            let posX = parseFloat(confetti.style.left);
+            let posY = parseFloat(confetti.style.top);
+            let velX = velocityX;
+            let velY = velocityY;
+            let rotation = 0;
+            let rotationSpeed = Math.random() * 360 - 180; // Degrees per second
+            
+            // Animation duration
+            const duration = isBaloonPop ? 1 : 2; // seconds
+            const fps = 60;
+            const totalFrames = duration * fps;
+            let frame = 0;
+            
+            // Animation function
+            function animate() {
+                // Update position based on velocity
+                posX += velX / fps;
+                posY += velY / fps;
+                
+                // Update velocity based on gravity and drag
+                velX *= (1 - drag);
+                velY += gravity / fps;
+                velY *= (1 - drag);
+                
+                // Update rotation
+                rotation += rotationSpeed / fps;
+                
+                // Apply updated position and rotation
+                confetti.style.left = posX + 'px';
+                confetti.style.top = posY + 'px';
+                confetti.style.transform = `rotate(${rotation}deg)`;
+                
+                // Gradually reduce opacity
+                confetti.style.opacity = 1 - (frame / totalFrames);
+                
+                // Continue animation or clean up
+                frame++;
+                if (frame < totalFrames) {
+                    requestAnimationFrame(animate);
+                } else if (confetti.parentNode) {
+                    confetti.parentNode.removeChild(confetti);
+                }
+            }
+            
+            // Start animation
+            requestAnimationFrame(animate);
+        }
+        
+        // Initialize the website when everything is loaded
+        window.addEventListener('load', function() {
+            // Create initial sparkles effect
+            createSparkles();
+        });
+    </script>
+</body>
+</html>
